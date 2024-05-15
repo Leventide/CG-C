@@ -8,6 +8,9 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 /* GLOBAL VARIABLES */
 //////////////////////
 
+var fixPerspectiveCamera
+var scene, renderer
+
 
 /////////////////////
 /* CREATE SCENE(S) */
@@ -15,12 +18,21 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 function createScene(){
     'use strict';
 
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xfedcba);
+    scene.add(new THREE.AxesHelper(10));
 }
 
 //////////////////////
 /* CREATE CAMERA(S) */
 //////////////////////
-
+function createCameras(){
+    'use strict';
+    
+    fixPerspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
+    fixPerspectiveCamera.position.set(50, 80, 50);
+    fixPerspectiveCamera.lookAt(scene.position);
+}
 
 /////////////////////
 /* CREATE LIGHT(S) */
@@ -59,7 +71,7 @@ function update(){
 /////////////
 function render() {
     'use strict';
-
+    renderer.render(scene, fixPerspectiveCamera);
 }
 
 ////////////////////////////////
@@ -67,6 +79,17 @@ function render() {
 ////////////////////////////////
 function init() {
     'use strict';
+
+    // Initialize renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create scene and cameras
+    createScene();
+    createCameras();
+
+    render()
 
 }
 
@@ -102,4 +125,3 @@ function onKeyUp(e){
 }
 
 init();
-animate();
