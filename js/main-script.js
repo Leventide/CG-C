@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { ParametricGeometries } from "../node_modules/three/examples/jsm/geometries/ParametricGeometries.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 import * as Stats from 'three/addons/libs/stats.module.js';
@@ -100,6 +101,12 @@ function createObjects(){
     main_cylinder.add(disc2);
     main_cylinder.add(disc3);
     scene.add(main_cylinder);
+
+    var klein_geometry = new THREE.ParametricBufferGeometry(ParametricGeometries.klein, 25, 25);
+    var klein_obj = new THREE.Mesh( klein_geometry, temporary_material2 );
+    klein_obj.position.set(10, 10, 10);
+    scene.add(klein_obj);
+
 
 }
 
