@@ -8,11 +8,16 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 /* GLOBAL VARIABLES */
 //////////////////////
 
-var frontalCamera, fixPerspectiveCamera
+var fixPerspectiveCamera
 var scene, renderer
 var main_cylinder, disc1, disc2, disc3
-var up
+var up1, up2, up3
+var delta
+var active1, active2, active3
+var press
+const pressedKeys = new Set();
 
+var clock = new THREE.Clock();
 var temporary_material1, temporary_material2, temporary_material3, temporary_material4
 
 /////////////////////
@@ -31,10 +36,6 @@ function createScene(){
 //////////////////////
 function createCameras(){
     'use strict';
-    
-    frontalCamera = new THREE.OrthographicCamera(-70, 70, 70, -5, 1, 200);
-    frontalCamera.position.set(0, 0, 100);
-    frontalCamera.lookAt(scene.position);
 
     fixPerspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
     fixPerspectiveCamera.position.set(50, 80, 50);
@@ -102,6 +103,26 @@ function createObjects(){
 
 }
 
+///////////////////////
+/* MOVEMENT FUNCTONS */
+///////////////////////
+function disc_move(disc, delta_time, up) {
+    if (up == 0) {
+        disc.position.y += 0.1*delta_time*100;
+    } else if (up == 1) {
+        disc.position.y -= 0.1*delta_time*100;
+    }
+}
+
+function check_up (disc, up) {
+    if (disc.position.y >= 25 && up == 0) {
+        up = 1;
+    }
+    if (disc.position.y <= -22 && up == 1) {
+        up = 0;
+    }
+    return up;
+}
 
 ////////////
 /* UPDATE */
@@ -116,7 +137,7 @@ function update(){
 /////////////
 function render() {
     'use strict';
-    renderer.render(scene, frontalCamera);
+    renderer.render(scene, fixPerspectiveCamera);
 }
 
 ////////////////////////////////
@@ -138,9 +159,17 @@ function init() {
 
 
     render()
-    up = true;
+    active1 = false;
+    active2 = false;
+    active3 = false;
+    up1 = 0;
+    up2 = 0;
+    up3 = 0;
+    press = true;
     // Event listeners for keyboard input and window resize
     window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("resize", onResize);
 }
 
 /////////////////////
@@ -149,9 +178,24 @@ function init() {
 function animate() {
     'use strict';
     
-    main_cylinder.rotation.y += Math.PI*0.001;
+    delta = clock.getDelta();
+    if (delta < 0.5) {
+        main_cylinder.rotation.y += Math.PI*0.01*delta*10;
+        if (active1) {
+            up1 = check_up(disc1, up1);
+            disc_move(disc1, delta, up1);
+        }
+        if (active2) {
+            up2 = check_up(disc2, up2);
+            disc_move(disc2, delta, up2);
+        }
+        if (active3) {
+            up3 = check_up(disc3, up3);
+            disc_move(disc3, delta, up3);
+        }
+    }
 
-    renderer.render(scene, frontalCamera);
+    renderer.render(scene, fixPerspectiveCamera);
     requestAnimationFrame(animate);
 }
 
@@ -160,7 +204,13 @@ function animate() {
 ////////////////////////////
 function onResize() { 
     'use strict';
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
+    if (window.innerHeight > 0 && window.innerWidth > 0) {
+        fixPerspectiveCamera.aspect = window.innerWidth / window.innerHeight;
+        fixPerspectiveCamera.updateProjectionMatrix();
+    }
 }
 
 ///////////////////////
@@ -169,14 +219,8 @@ function onResize() {
 function onKeyDown(e) {
     'use strict';
 
-    switch (e.keyCode) {
-        case 49: // '1'
-            break;
-        case 50: // '2'
-            break;
-        case 51: // '3'
-            break;
-    }
+    pressedKeys.add(e.key);
+    press = true;
 }
 
 ///////////////////////
@@ -184,6 +228,28 @@ function onKeyDown(e) {
 ///////////////////////
 function onKeyUp(e){
     'use strict';
+
+    checkPressedKeys();
+    press = false;
+    pressedKeys.delete(e.key);
+}
+
+////////////////
+/* CHECK KEYS */
+////////////////
+function checkPressedKeys() {
+
+    if (press) {
+        if (pressedKeys.has('1')) {
+            active1 = !active1;
+        }
+        if (pressedKeys.has('2')) {
+            active2 = !active2;
+        }
+        if (pressedKeys.has('3')) {
+            active3 = !active3;
+        }
+    }
 }
 
 init();
