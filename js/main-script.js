@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { ParametricGeometries } from "../node_modules/three/examples/jsm/geometries/ParametricGeometries.js";
+import { ParametricGeometry } from '../node_modules/three/examples/jsm/geometries/ParametricGeometry.js';
+import { ParametricGeometries } from '../node_modules/three/examples/jsm/geometries/ParametricGeometries.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 import * as Stats from 'three/addons/libs/stats.module.js';
@@ -9,7 +10,7 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 /* GLOBAL VARIABLES */
 //////////////////////
 
-var fixPerspectiveCamera
+var fixPerspectiveCamera, topCamera
 var scene, renderer
 var main_cylinder, disc1, disc2, disc3
 var up1, up2, up3
@@ -18,8 +19,11 @@ var active1, active2, active3
 var press
 const pressedKeys = new Set();
 
+var klein_obj1, klein_obj2, klein_obj3
+var mobius_obj1, mobius_obj2, mobius_obj3
+
 var clock = new THREE.Clock();
-var temporary_material1, temporary_material2, temporary_material3, temporary_material4
+var temporary_material1, temporary_material2, temporary_material3, temporary_material4, temporary_material5
 
 /////////////////////
 /* CREATE SCENE(S) */
@@ -37,6 +41,10 @@ function createScene(){
 //////////////////////
 function createCameras(){
     'use strict';
+    
+    topCamera = new THREE.OrthographicCamera(-70, 70, 70, -5, 1, 200);
+    topCamera.position.set(0, 0, 100);
+    topCamera.lookAt(scene.position);
 
     fixPerspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
     fixPerspectiveCamera.position.set(50, 80, 50);
@@ -53,15 +61,15 @@ function createCameras(){
 function createObjects(){
     'use strict';
     temporary_material1 = new THREE.MeshBasicMaterial({color: 'Gray'});
-    temporary_material1.wireframe = true;
     temporary_material2 = new THREE.MeshBasicMaterial({color: 'Yellow'});
     temporary_material3 = new THREE.MeshBasicMaterial({color: 'Red'});
     temporary_material4 = new THREE.MeshBasicMaterial({color: 'Blue'});
+    temporary_material5 = new THREE.MeshBasicMaterial({color: 'Purple'});
+
     var extrudesettings = {
         depth: 3,
         bevelEnabled: false
     };
-
     var main_cylinder_geometry = new THREE.CylinderGeometry(5, 5, 50, 32);
     main_cylinder = new THREE.Mesh(main_cylinder_geometry, temporary_material1);
     main_cylinder.position.set(0, 25, 0);
@@ -100,15 +108,58 @@ function createObjects(){
     main_cylinder.add(disc1);
     main_cylinder.add(disc2);
     main_cylinder.add(disc3);
+
+    var klein_geometry = new ParametricGeometry(ParametricGeometries.klein, 25, 25);
+    var mobius_geometry = new ParametricGeometry(ParametricGeometries.mobius, 25, 25);
+
+    klein_obj1 = new THREE.Mesh(klein_geometry, temporary_material5);
+    klein_obj1.scale.set(0.25, 0.25, 0.25);
+    disc1.add(klein_obj1);
+    klein_obj1.position.x = 6;
+    klein_obj1.position.y = -6;
+    klein_obj1.position.z = -2.5;
+    klein_obj1.rotation.x = -Math.PI
+
+    mobius_obj1 = new THREE.Mesh(mobius_geometry, temporary_material5);
+    mobius_obj1.scale.set(1.2, 1.2, 1.2);
+    disc1.add(mobius_obj1);
+    mobius_obj1.position.x = 6;
+    mobius_obj1.position.y = 6;
+    mobius_obj1.position.z = -0.65;
+    mobius_obj1.rotation.x = -Math.PI
+
+    
+    klein_obj2 = new THREE.Mesh(klein_geometry, temporary_material5);
+    klein_obj2.scale.set(0.2, 0.2, 0.2);
+    disc2.add(klein_obj2);
+    klein_obj2.position.x = -15.5;
+    klein_obj2.position.z = -0.7;
+    klein_obj2.rotation.x = Math.PI*0.5
+
+    mobius_obj2 = new THREE.Mesh(mobius_geometry, temporary_material5);
+    disc2.add(mobius_obj2);
+    mobius_obj2.position.x = 10.5;
+    mobius_obj2.position.y = -10.5;
+    mobius_obj2.position.z = -1.9;
+    mobius_obj2.rotation.x = -Math.PI*0.33
+
+    klein_obj3 = new THREE.Mesh(klein_geometry, temporary_material5);
+    klein_obj3.scale.set(0.33, 0.33, 0.33);
+    disc3.add(klein_obj3);
+    klein_obj3.position.y = 22.5;
+    klein_obj3.position.z = -2.7;
+    
+    mobius_obj3 = new THREE.Mesh(mobius_geometry, temporary_material5);
+    mobius_obj3.scale.set(1.33, 1.33, 1.33);
+    disc3.add(mobius_obj3);
+    mobius_obj3.position.y = -22.5;
+    mobius_obj3.position.z = -3;
+    mobius_obj3.rotation.x = Math.PI*0.33
+
     scene.add(main_cylinder);
-
-    var klein_geometry = new THREE.ParametricBufferGeometry(ParametricGeometries.klein, 25, 25);
-    var klein_obj = new THREE.Mesh( klein_geometry, temporary_material2 );
-    klein_obj.position.set(10, 10, 10);
-    scene.add(klein_obj);
-
-
 }
+
+
 
 ///////////////////////
 /* MOVEMENT FUNCTONS */
@@ -144,7 +195,7 @@ function update(){
 /////////////
 function render() {
     'use strict';
-    renderer.render(scene, fixPerspectiveCamera);
+    renderer.render(scene, topCamera);
 }
 
 ////////////////////////////////
@@ -187,7 +238,7 @@ function animate() {
     
     delta = clock.getDelta();
     if (delta < 0.5) {
-        main_cylinder.rotation.y += Math.PI*0.01*delta*10;
+        //main_cylinder.rotation.y += Math.PI*0.01*delta*10;
         if (active1) {
             up1 = check_up(disc1, up1);
             disc_move(disc1, delta, up1);
@@ -202,7 +253,7 @@ function animate() {
         }
     }
 
-    renderer.render(scene, fixPerspectiveCamera);
+    renderer.render(scene, topCamera);
     requestAnimationFrame(animate);
 }
 
