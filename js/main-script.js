@@ -19,6 +19,8 @@ var active1, active2, active3
 var press
 const pressedKeys = new Set();
 
+var directionalLight
+
 var klein_obj1, klein_obj2, klein_obj3
 var mobius_obj1, mobius_obj2, mobius_obj3
 
@@ -32,7 +34,7 @@ function createScene(){
     'use strict';
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xfedcba);
+    //scene.background = new THREE.Color(0xfedcba);
     scene.add(new THREE.AxesHelper(10));
 }
 
@@ -54,17 +56,25 @@ function createCameras(){
 /////////////////////
 /* CREATE LIGHT(S) */
 /////////////////////
+function createLights() {
+    directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.position.set(5, 50, 15);
+    scene.add(directionalLight);
+
+    const ambientLight = new THREE.AmbientLight(0xffa500, 0.2);
+    scene.add(ambientLight);
+}
 
 ////////////////////////
 /* CREATE OBJECT3D(S) */
 ////////////////////////
 function createObjects(){
     'use strict';
-    temporary_material1 = new THREE.MeshBasicMaterial({color: 'Gray'});
-    temporary_material2 = new THREE.MeshBasicMaterial({color: 'Yellow'});
-    temporary_material3 = new THREE.MeshBasicMaterial({color: 'Red'});
-    temporary_material4 = new THREE.MeshBasicMaterial({color: 'Blue'});
-    temporary_material5 = new THREE.MeshBasicMaterial({color: 'Purple'});
+    temporary_material1 = new THREE.MeshStandardMaterial({color: 'Gray'});
+    temporary_material2 = new THREE.MeshStandardMaterial({color: 'Yellow'});
+    temporary_material3 = new THREE.MeshStandardMaterial({color: 'Red'});
+    temporary_material4 = new THREE.MeshStandardMaterial({color: 'Blue'});
+    temporary_material5 = new THREE.MeshStandardMaterial({color: 'Purple'});
 
     var extrudesettings = {
         depth: 3,
@@ -212,6 +222,7 @@ function init() {
     // Create scene and cameras
     createScene();
     createCameras();
+    createLights();
 
     createObjects();
 
@@ -279,6 +290,10 @@ function onKeyDown(e) {
 
     pressedKeys.add(e.key);
     press = true;
+
+    if (e.key === 'D' || e.key === 'd') {
+        directionalLight.visible = !directionalLight.visible;
+    }
 }
 
 ///////////////////////
