@@ -10,7 +10,7 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 /* GLOBAL VARIABLES */
 //////////////////////
 
-var fixPerspectiveCamera, topCamera
+var fixPerspectiveCamera, topCamera, stereoCamera
 var scene, renderer
 var main_cylinder, disc1, disc2, disc3
 var up1, up2, up3
@@ -51,6 +51,12 @@ function createCameras(){
     fixPerspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
     fixPerspectiveCamera.position.set(50, 80, 50);
     fixPerspectiveCamera.lookAt(scene.position);
+
+    stereoCamera = new THREE.StereoCamera();
+    stereoCamera.cameraL.position.copy(fixPerspectiveCamera.position);
+    stereoCamera.cameraR.position.copy(fixPerspectiveCamera.position);
+    stereoCamera.cameraL.lookAt(scene.position);
+    stereoCamera.cameraR.lookAt(scene.position);
 }
 
 /////////////////////
@@ -219,6 +225,9 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    document.body.appendChild(VRButton.createButton(renderer));
+    renderer.xr.enabled = true;
+
     // Create scene and cameras
     createScene();
     createCameras();
@@ -265,7 +274,8 @@ function animate() {
     }
 
     renderer.render(scene, topCamera);
-    requestAnimationFrame(animate);
+    //requestAnimationFrame(animate);
+    renderer.setAnimationLoop(animate);
 }
 
 ////////////////////////////
