@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { ParametricGeometry } from '/node_modules/three/examples/jsm/geometries/ParametricGeometry.js';
+import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 import * as Stats from 'three/addons/libs/stats.module.js';
