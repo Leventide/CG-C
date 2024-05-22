@@ -9,7 +9,7 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 /* GLOBAL VARIABLES */
 //////////////////////
 
-var fixPerspectiveCamera, topCamera, stereoCamera
+var fixPerspectiveCamera, stereoCamera
 var scene, renderer
 var main_cylinder, disc1, disc2, disc3
 var up1, up2, up3
@@ -39,7 +39,6 @@ function createScene(){
     'use strict';
 
     scene = new THREE.Scene();
-    //scene.background = new THREE.Color(0xfedcba);
     scene.add(new THREE.AxesHelper(10));
 }
 
@@ -48,10 +47,6 @@ function createScene(){
 //////////////////////
 function createCameras(){
     'use strict';
-    
-    topCamera = new THREE.OrthographicCamera(-70, 70, 70, -5, 1, 200);
-    topCamera.position.set(0, 0, 100);
-    topCamera.lookAt(scene.position);
 
     fixPerspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
     fixPerspectiveCamera.position.set(40, 70, 40);
@@ -82,7 +77,6 @@ function createLights() {
 function createObjects(){
     'use strict';
     temporary_material1 = new THREE.MeshStandardMaterial({color: 'Gray'});
-    temporary_material1.wireframe = true;
     temporary_material2 = new THREE.MeshStandardMaterial({color: 'Yellow'});
     temporary_material3 = new THREE.MeshStandardMaterial({color: 'Red'});
     temporary_material4 = new THREE.MeshStandardMaterial({color: 'Blue'});
@@ -165,20 +159,21 @@ function createObjects(){
     hyperboloid1 = new THREE.Mesh(hyperboloid_geometry, temporary_material5);
     hyperboloid1.scale.set(0.5, 0.5, 0.5)
     hyperboloid1.position.x = 8.5
-    hyperboloid1.position.z = -2.5
+    hyperboloid1.position.z = -2.75
     disc1.add(hyperboloid1)
 
     hyperboloid2 = new THREE.Mesh(hyperboloid_geometry, temporary_material5);
     hyperboloid2.scale.set(0.55, 0.55, 0.55)
     hyperboloid2.position.y = 15.5
     hyperboloid2.position.z = -2.5
-    hyperboloid2.rotation.z = Math.PI*0.5
+    hyperboloid2.rotation.x = Math.PI*0.5
+    hyperboloid2.rotation.y = Math.PI*0.5
     disc2.add(hyperboloid2)
 
     hyperboloid3 = new THREE.Mesh(hyperboloid_geometry, temporary_material5);
     hyperboloid3.scale.set(0.6, 0.6, 0.6)
     hyperboloid3.position.x = 22
-    hyperboloid3.position.z = -2.5
+    hyperboloid3.position.z = -3.25
     hyperboloid3.rotation.y = Math.PI*0.5
     disc3.add(hyperboloid3)
 
@@ -192,7 +187,7 @@ function createObjects(){
     cone2 = new THREE.Mesh(cone_geometry, temporary_material5);
     cone2.scale.set(1.4, 1.4, 1.4)
     cone2.position.y = -15
-    cone2.position.z = -2
+    cone2.position.z = -2.25
     cone2.rotation.y = Math.PI*0.5
     disc2.add(cone2)
 
@@ -206,14 +201,14 @@ function createObjects(){
 
     torus1 = new THREE.Mesh(torus_geometry, temporary_material5);
     torus1.position.x = -8.5
-    torus1.position.z = -1
+    torus1.position.z = -1.75
+    torus1.rotation.y = Math.PI*0.5
     disc1.add(torus1)
 
     torus2 = new THREE.Mesh(torus_geometry, temporary_material5);
     torus2.scale.set(1.2, 1.2, 1.2)
     torus2.position.x = 15
-    torus2.position.z = -2.25
-    torus2.rotation.y = Math.PI*0.5
+    torus2.position.z = -2
     disc2.add(torus2)
 
     torus3 = new THREE.Mesh(torus_geometry, temporary_material5);
@@ -234,27 +229,27 @@ function createObjects(){
     helix2.scale.set(1.2, 1.2, 1.2)
     helix2.position.x = 10.5
     helix2.position.y = 10.5
-    helix2.position.z = -1
+    helix2.position.z = -1.3
     helix2.rotation.y = Math.PI*0.75   
     disc2.add(helix2)
 
     helix3 = new THREE.Mesh(helix_geometry, temporary_material5);
     helix3.scale.set(1.33, 1.33, 1.33)
     helix3.position.y = -22
-    helix3.position.z = -3
+    helix3.position.z = -3.5
     disc3.add(helix3)
 
     ripple1 = new THREE.Mesh(ripple_geometry, temporary_material5);
     ripple1.scale.set(0.9, 0.9, 0.9)
     ripple1.position.x = 6
     ripple1.position.y = -6
-    ripple1.position.z = -1.25
+    ripple1.position.z = -2.25
     disc1.add(ripple1)
 
     ripple2 = new THREE.Mesh(ripple_geometry, temporary_material5);
     ripple2.position.x = -11
     ripple2.position.y = 11
-    ripple2.position.z = -1.75
+    ripple2.position.z = -2.5
     ripple2.rotation.y = Math.PI*0.75   
     disc2.add(ripple2)
 
@@ -269,7 +264,7 @@ function createObjects(){
     flatcircle1 = new THREE.Mesh(flatcircle_geometry, temporary_material5);
     flatcircle1.position.x = 6
     flatcircle1.position.y = 6
-    flatcircle1.position.z = -2
+    flatcircle1.position.z = -2.35
     flatcircle1.rotation.y = Math.PI*0.25
     disc1.add(flatcircle1)
 
@@ -277,8 +272,7 @@ function createObjects(){
     flatcircle2.scale.set(1.1, 1.1, 1.1)
     flatcircle2.position.x = -11
     flatcircle2.position.y = -11
-    flatcircle2.position.z = -1
-    
+    flatcircle2.position.z = -2.6
     disc2.add(flatcircle2)
 
     flatcircle3 = new THREE.Mesh(flatcircle_geometry, temporary_material5);
@@ -392,6 +386,41 @@ function check_up (disc, up) {
     return up;
 }
 
+function rotateAll(delta_time){
+    main_cylinder.rotation.y += Math.PI*0.01*delta*10;
+
+    elipsoid1.rotation.z += Math.PI*0.1*delta*10;
+    hyperboloid1.rotation.x += Math.PI*0.05*delta*10;
+    cone1.rotation.y += Math.PI*0.07*delta*10;
+    torus1.rotation.x += Math.PI*0.1*delta*10;
+    torus1.rotation.y += Math.PI*0.01*delta*10;
+    helix1.rotation.x += Math.PI*0.2*delta*10;
+    ripple1.rotation.x -= Math.PI*0.05*delta*10;
+    flatcircle1.rotation.x -= Math.PI*0.05*delta*10;
+    klein1.rotation.z -= Math.PI*0.1*delta*10;
+
+    elipsoid2.rotation.z += Math.PI*0.05*delta*10;
+    hyperboloid2.rotation.y += Math.PI*0.1*delta*10;
+    cone2.rotation.x += Math.PI*0.05*delta*10;
+    cone2.rotation.y += Math.PI*0.05*delta*10;
+    torus2.rotation.y += Math.PI*0.1*delta*10;
+    helix2.rotation.z += Math.PI*0.1*delta*10;
+    ripple2.rotation.x -= Math.PI*0.05*delta*10;
+    flatcircle2.rotation.x += Math.PI*0.05*delta*10;
+    klein2.rotation.x += Math.PI*0.1*delta*10;
+    
+    elipsoid3.rotation.z += Math.PI*0.09*delta*10;
+    hyperboloid3.rotation.x += Math.PI*0.05*delta*10;
+    hyperboloid3.rotation.y += Math.PI*0.05*delta*10;
+    cone3.rotation.x += Math.PI*0.1*delta*10;
+    torus3.rotation.x += Math.PI*0.1*delta*10;
+    helix3.rotation.z += Math.PI*0.3*delta*10;
+    ripple3.rotation.y += Math.PI*0.1*delta*10;
+    ripple3.rotation.x += Math.PI*0.1*delta*10;
+    flatcircle3.rotation.x += Math.PI*0.1*delta*10;
+    flatcircle3.rotation.y += Math.PI*0.1*delta*10;
+    klein3.rotation.y += Math.PI*0.1*delta*10;
+}
 ////////////
 /* UPDATE */
 ////////////
@@ -452,8 +481,6 @@ function animate() {
     
     delta = clock.getDelta();
     if (delta < 0.5) {
-        //main_cylinder.rotation.y += Math.PI*0.01*delta*10;
-        //maybe put the above in a rotation function that rotates everything and recieves delta
         if (active1) {
             up1 = check_up(disc1, up1);
             disc_move(disc1, delta, up1);
@@ -466,6 +493,7 @@ function animate() {
             up3 = check_up(disc3, up3);
             disc_move(disc3, delta, up3);
         }
+        rotateAll(delta);
     }
 
     renderer.render(scene, fixPerspectiveCamera);
@@ -495,10 +523,6 @@ function onKeyDown(e) {
 
     pressedKeys.add(e.key);
     press = true;
-
-    if (e.key === 'D' || e.key === 'd') {
-        directionalLight.visible = !directionalLight.visible;
-    }
 }
 
 ///////////////////////
@@ -526,6 +550,9 @@ function checkPressedKeys() {
         }
         if (pressedKeys.has('3')) {
             active3 = !active3;
+        }
+        if (pressedKeys.has('d')) {
+            directionalLight.visible = !directionalLight.visible;
         }
     }
 }
