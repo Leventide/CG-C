@@ -16,6 +16,11 @@ var press
 const pressedKeys = new Set();
 
 var directionalLight
+var spotLight1, spotLight2, spotLight3, spotLight4, spotLight5, spotLight6
+var spotLight7, spotLight8, spotLight9, spotLight10, spotLight11, spotLight12
+var spotLight13, spotLight14, spotLight15, spotLight16, spotLight17, spotLight18
+var spotLight19, spotLight20, spotLight21, spotLight22, spotLight23, spotLight24
+var spotLights = new Set();
 var buffer = new THREE.BufferGeometry();
 
 var elipsoid1, elipsoid2, elipsoid3
@@ -140,6 +145,12 @@ function createObjects(){
     elipsoid1.position.y = 8.5
     elipsoid1.position.z = -1.5
     disc1.add(elipsoid1)
+    spotLight1 = new THREE.SpotLight(0xffffff, 10);
+    spotLight1.position.set(0, 8.5, -1);
+    spotLight1.target.position.set(0, -8.5, 0)
+    spotLight1.angle = Math.PI*0.5
+    spotLights.add(spotLight1)
+    disc1.add(spotLight1)
 
     elipsoid2 = new THREE.Mesh(elipsoid_geometry, diffuse_material5);
     elipsoid2.scale.set(1.2, 1.2, 1.2)
@@ -148,6 +159,12 @@ function createObjects(){
     elipsoid2.position.z = -3
     elipsoid2.rotation.y = Math.PI*0.5
     disc2.add(elipsoid2)
+    spotLight2 = new THREE.SpotLight(0xffffff, 10);
+    spotLight2.position.set(11, -11, -1);
+    spotLight2.target.position.set(0, -8.5, 0)
+    spotLight2.angle = Math.PI*0.5
+    spotLights.add(spotLight2)
+    disc2.add(spotLight2)
 
     elipsoid3 = new THREE.Mesh(elipsoid_geometry, diffuse_material5);
     elipsoid3.scale.set(1.33, 1.33, 1.33)
@@ -155,12 +172,24 @@ function createObjects(){
     elipsoid3.position.z = -2.5
     elipsoid3.rotation.y = Math.PI*0.25
     disc3.add(elipsoid3)
+    spotLight3 = new THREE.SpotLight(0xffffff, 10);
+    spotLight3.position.set(-22, 0, -1);
+    spotLight3.target.position.set(0, -8.5, 0)
+    spotLight3.angle = Math.PI*0.5
+    spotLights.add(spotLight3)
+    disc3.add(spotLight3)
 
     hyperboloid1 = new THREE.Mesh(hyperboloid_geometry, diffuse_material5);
     hyperboloid1.scale.set(0.5, 0.5, 0.5)
     hyperboloid1.position.x = 8.5
     hyperboloid1.position.z = -2.75
     disc1.add(hyperboloid1)
+    spotLight4 = new THREE.SpotLight(0xffffff, 10);
+    spotLight4.position.set(8.5, 0, -1);
+    spotLight4.target.position.set(0, -8.5, 0)
+    spotLight4.angle = Math.PI*0.5
+    spotLights.add(spotLight4)
+    disc1.add(spotLight4)
 
     hyperboloid2 = new THREE.Mesh(hyperboloid_geometry, diffuse_material5);
     hyperboloid2.scale.set(0.55, 0.55, 0.55)
@@ -169,6 +198,12 @@ function createObjects(){
     hyperboloid2.rotation.x = Math.PI*0.5
     hyperboloid2.rotation.y = Math.PI*0.5
     disc2.add(hyperboloid2)
+    spotLight5 = new THREE.SpotLight(0xffffff, 10);
+    spotLight5.position.set(0, 15.5, -1);
+    spotLight5.target.position.set(0, -8.5, 0)
+    spotLight5.angle = Math.PI*0.5
+    spotLights.add(spotLight5)
+    disc2.add(spotLight5)
 
     hyperboloid3 = new THREE.Mesh(hyperboloid_geometry, diffuse_material5);
     hyperboloid3.scale.set(0.6, 0.6, 0.6)
@@ -176,6 +211,12 @@ function createObjects(){
     hyperboloid3.position.z = -3.25
     hyperboloid3.rotation.y = Math.PI*0.5
     disc3.add(hyperboloid3)
+    spotLight6 = new THREE.SpotLight(0xffffff, 10);
+    spotLight6.position.set(22, 0, -1);
+    spotLight6.target.position.set(0, -8.5, 0)
+    spotLight6.angle = Math.PI*0.5
+    spotLights.add(spotLight6)
+    disc3.add(spotLight6)
 
     cone1 = new THREE.Mesh(cone_geometry, diffuse_material5);
     cone1.scale.set(1.25, 1.25, 1.25)
@@ -183,6 +224,12 @@ function createObjects(){
     cone1.position.y = -6
     cone1.position.z = -2
     disc1.add(cone1)
+    spotLight7 = new THREE.SpotLight(0xffffff, 10);
+    spotLight7.position.set(-6, -6, -1);
+    spotLight7.target.position.set(0, -8.5, 0)
+    spotLight7.angle = Math.PI*0.5
+    spotLights.add(spotLight7)
+    disc1.add(spotLight7)
 
     cone2 = new THREE.Mesh(cone_geometry, diffuse_material5);
     cone2.scale.set(1.4, 1.4, 1.4)
@@ -190,6 +237,12 @@ function createObjects(){
     cone2.position.z = -2.25
     cone2.rotation.y = Math.PI*0.5
     disc2.add(cone2)
+    spotLight8 = new THREE.SpotLight(0xffffff, 10);
+    spotLight8.position.set(0, -15, -1);
+    spotLight8.target.position.set(0, -8.5, 0)
+    spotLight8.angle = Math.PI*0.5
+    spotLights.add(spotLight8)
+    disc2.add(spotLight8)
 
     cone3 = new THREE.Mesh(cone_geometry, diffuse_material5);
     cone3.scale.set(1.55, 1.55, 1.55)
@@ -198,18 +251,36 @@ function createObjects(){
     cone3.position.z = -2.5
     cone3.rotation.y = Math.PI*0.75
     disc3.add(cone3)
+    spotLight9 = new THREE.SpotLight(0xffffff, 10);
+    spotLight9.position.set(-15.5, -15.5, -1);
+    spotLight9.target.position.set(0, -8.5, 0)
+    spotLight9.angle = Math.PI*0.5
+    spotLights.add(spotLight9)
+    disc3.add(spotLight9)
 
     torus1 = new THREE.Mesh(torus_geometry, diffuse_material5);
     torus1.position.x = -8.5
     torus1.position.z = -1.75
     torus1.rotation.y = Math.PI*0.5
     disc1.add(torus1)
+    spotLight10 = new THREE.SpotLight(0xffffff, 10);
+    spotLight10.position.set(-8.5, 0, -1);
+    spotLight10.target.position.set(0, -8.5, 0)
+    spotLight10.angle = Math.PI*0.5
+    spotLights.add(spotLight10)
+    disc1.add(spotLight10)
 
     torus2 = new THREE.Mesh(torus_geometry, diffuse_material5);
     torus2.scale.set(1.2, 1.2, 1.2)
     torus2.position.x = 15
     torus2.position.z = -2
     disc2.add(torus2)
+    spotLight11 = new THREE.SpotLight(0xffffff, 10);
+    spotLight11.position.set(15, 0, -1);
+    spotLight11.target.position.set(0, -8.5, 0)
+    spotLight11.angle = Math.PI*0.5
+    spotLights.add(spotLight11)
+    disc2.add(spotLight11)
 
     torus3 = new THREE.Mesh(torus_geometry, diffuse_material5);
     torus3.scale.set(1.33, 1.33, 1.33)
@@ -217,6 +288,12 @@ function createObjects(){
     torus3.position.z = -2
     torus3.rotation.y = Math.PI*0.75
     disc3.add(torus3)
+    spotLight12 = new THREE.SpotLight(0xffffff, 10);
+    spotLight12.position.set(0, 22, -1);
+    spotLight12.target.position.set(0, -8.5, 0)
+    spotLight12.angle = Math.PI*0.5
+    spotLights.add(spotLight12)
+    disc3.add(spotLight12)
 
     helix1 = new THREE.Mesh(helix_geometry, diffuse_material5);
     helix1.position.x = -1
@@ -224,6 +301,12 @@ function createObjects(){
     helix1.position.z = -1.25
     helix1.rotation.y = Math.PI*0.5
     disc1.add(helix1)
+    spotLight13 = new THREE.SpotLight(0xffffff, 10);
+    spotLight13.position.set(-1, -8.5, -1);
+    spotLight13.target.position.set(0, -8.5, 0)
+    spotLight13.angle = Math.PI*0.5
+    spotLights.add(spotLight13)
+    disc1.add(spotLight13)
 
     helix2 = new THREE.Mesh(helix_geometry, diffuse_material5);
     helix2.scale.set(1.2, 1.2, 1.2)
@@ -232,12 +315,24 @@ function createObjects(){
     helix2.position.z = -1.3
     helix2.rotation.y = Math.PI*0.75   
     disc2.add(helix2)
+    spotLight14 = new THREE.SpotLight(0xffffff, 10);
+    spotLight14.position.set(10.5, 10.5, -1);
+    spotLight14.target.position.set(0, -8.5, 0)
+    spotLight14.angle = Math.PI*0.5
+    spotLights.add(spotLight14)
+    disc2.add(spotLight14)
 
     helix3 = new THREE.Mesh(helix_geometry, diffuse_material5);
     helix3.scale.set(1.33, 1.33, 1.33)
     helix3.position.y = -22
     helix3.position.z = -3.5
     disc3.add(helix3)
+    spotLight15 = new THREE.SpotLight(0xffffff, 10);
+    spotLight15.position.set(0, -22, -1);
+    spotLight15.target.position.set(0, -8.5, 0)
+    spotLight15.angle = Math.PI*0.5
+    spotLights.add(spotLight15)
+    disc3.add(spotLight15)
 
     ripple1 = new THREE.Mesh(ripple_geometry, diffuse_material5);
     ripple1.scale.set(0.9, 0.9, 0.9)
@@ -245,6 +340,12 @@ function createObjects(){
     ripple1.position.y = -6
     ripple1.position.z = -2.25
     disc1.add(ripple1)
+    spotLight16 = new THREE.SpotLight(0xffffff, 10);
+    spotLight16.position.set(6, -6, -1);
+    spotLight16.target.position.set(0, -8.5, 0)
+    spotLight16.angle = Math.PI*0.5
+    spotLights.add(spotLight16)
+    disc1.add(spotLight16)
 
     ripple2 = new THREE.Mesh(ripple_geometry, diffuse_material5);
     ripple2.position.x = -11
@@ -252,6 +353,12 @@ function createObjects(){
     ripple2.position.z = -2.5
     ripple2.rotation.y = Math.PI*0.75   
     disc2.add(ripple2)
+    spotLight17 = new THREE.SpotLight(0xffffff, 10);
+    spotLight17.position.set(-11, 11, -1);
+    spotLight17.target.position.set(0, -8.5, 0)
+    spotLight17.angle = Math.PI*0.5
+    spotLights.add(spotLight17)
+    disc2.add(spotLight17)
 
     ripple3 = new THREE.Mesh(ripple_geometry, diffuse_material5);
     ripple3.scale.set(1.1, 1.1, 1.1)
@@ -260,6 +367,12 @@ function createObjects(){
     ripple3.position.z = -2.5
     ripple3.rotation.y = Math.PI*0.5
     disc3.add(ripple3)
+    spotLight18 = new THREE.SpotLight(0xffffff, 10);
+    spotLight18.position.set(15.5, 15.5, -1);
+    spotLight18.target.position.set(0, -8.5, 0)
+    spotLight18.angle = Math.PI*0.5
+    spotLights.add(spotLight18)
+    disc3.add(spotLight18)
 
     flatcircle1 = new THREE.Mesh(flatcircle_geometry, diffuse_material5);
     flatcircle1.position.x = 6
@@ -267,6 +380,12 @@ function createObjects(){
     flatcircle1.position.z = -2.35
     flatcircle1.rotation.y = Math.PI*0.25
     disc1.add(flatcircle1)
+    spotLight19 = new THREE.SpotLight(0xffffff, 10);
+    spotLight19.position.set(6, 6, -1);
+    spotLight19.target.position.set(0, -8.5, 0)
+    spotLight19.angle = Math.PI*0.5
+    spotLights.add(spotLight19)
+    disc1.add(spotLight19)
 
     flatcircle2 = new THREE.Mesh(flatcircle_geometry, diffuse_material5);
     flatcircle2.scale.set(1.1, 1.1, 1.1)
@@ -274,6 +393,12 @@ function createObjects(){
     flatcircle2.position.y = -11
     flatcircle2.position.z = -2.6
     disc2.add(flatcircle2)
+    spotLight20 = new THREE.SpotLight(0xffffff, 10);
+    spotLight20.position.set(-11, -11, -1);
+    spotLight20.target.position.set(0, -8.5, 0)
+    spotLight20.angle = Math.PI*0.5
+    spotLights.add(spotLight20)
+    disc2.add(spotLight20)
 
     flatcircle3 = new THREE.Mesh(flatcircle_geometry, diffuse_material5);
     flatcircle3.scale.set(1.2, 1.2, 1.2)
@@ -282,6 +407,12 @@ function createObjects(){
     flatcircle3.position.z = -3
     flatcircle3.rotation.y = Math.PI*0.5
     disc3.add(flatcircle3)
+    spotLight21 = new THREE.SpotLight(0xffffff, 10);
+    spotLight21.position.set(-15.5, 15.5, -1);
+    spotLight21.target.position.set(0, -8.5, 0)
+    spotLight21.angle = Math.PI*0.5
+    spotLights.add(spotLight21)
+    disc3.add(spotLight21)
 
     klein1 = new THREE.Mesh(klein_geometry, diffuse_material5);
     klein1.scale.set(0.25, 0.25, 0.25)
@@ -289,6 +420,12 @@ function createObjects(){
     klein1.position.y = 6
     klein1.position.z = -2.5
     disc1.add(klein1)
+    spotLight22 = new THREE.SpotLight(0xffffff, 10);
+    spotLight22.position.set(-6, 6, -1);
+    spotLight22.target.position.set(0, -8.5, 0)
+    spotLight22.angle = Math.PI*0.5
+    spotLights.add(spotLight22)
+    disc1.add(spotLight22)
 
     klein2 = new THREE.Mesh(klein_geometry, diffuse_material5);
     klein2.scale.set(0.3, 0.3, 0.3)
@@ -296,6 +433,12 @@ function createObjects(){
     klein2.position.z = -2.5
     klein2.rotation.y = Math.PI*0.5
     disc2.add(klein2)
+    spotLight23 = new THREE.SpotLight(0xffffff, 10);
+    spotLight23.position.set(-15.25, 0, -1);
+    spotLight23.target.position.set(0, -8.5, 0)
+    spotLight23.angle = Math.PI*0.5
+    spotLights.add(spotLight23)
+    disc2.add(spotLight23)
 
     klein3 = new THREE.Mesh(klein_geometry, diffuse_material5);
     klein3.scale.set(0.33, 0.33, 0.33)
@@ -304,6 +447,12 @@ function createObjects(){
     klein3.position.z = -3.75
     klein3.rotation.y = Math.PI
     disc3.add(klein3)
+    spotLight24 = new THREE.SpotLight(0xffffff, 10);
+    spotLight24.position.set(15.5, -15.5, -1);
+    spotLight24.target.position.set(0, -8.5, 0)
+    spotLight24.angle = Math.PI*0.5
+    spotLights.add(spotLight24)
+    disc3.add(spotLight24)
 
     mobius = new THREE.Mesh(mobius_geometry, diffuse_material6);
     mobius.scale.set(1.5, 1.5, 1.5)
@@ -759,6 +908,11 @@ function checkPressedKeys() {
         }
         if (pressedKeys.has('d')) {
             directionalLight.visible = !directionalLight.visible;
+        }
+        if (pressedKeys.has('s')) {
+            spotLights.forEach(spotlight => {
+                spotlight.visible = !spotlight.visible;
+            });
         }
         if (pressedKeys.has('q')) {
             changeMaterials("diffuse");
