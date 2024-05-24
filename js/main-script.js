@@ -21,6 +21,12 @@ var spotLight7, spotLight8, spotLight9, spotLight10, spotLight11, spotLight12
 var spotLight13, spotLight14, spotLight15, spotLight16, spotLight17, spotLight18
 var spotLight19, spotLight20, spotLight21, spotLight22, spotLight23, spotLight24
 var spotLights = new Set();
+
+var pointLight1, pointLight2, pointLight3, pointLight4
+var pointLight5, pointLight6, pointLight7, pointLight8
+var pointLights = new Set();
+
+
 var buffer = new THREE.BufferGeometry();
 
 var elipsoid1, elipsoid2, elipsoid3
@@ -455,11 +461,13 @@ function createObjects(){
     disc3.add(spotLight24)
 
     mobius = new THREE.Mesh(mobius_geometry, diffuse_material6);
-    mobius.scale.set(1.5, 1.5, 1.5)
-    mobius.position.y = 28
+    mobius.scale.set(2.5, 2.5, 2.5)
+    mobius.position.y = 30
     mobius.rotation.x = Math.PI*0.5
-    main_cylinder.add(mobius)
+    
+    createMobiusLights();
 
+    main_cylinder.add(mobius)
     scene.add(main_cylinder);
 }
 
@@ -615,7 +623,6 @@ function kleinParam(u, v, target) {
     target.y = -2 * (1 - Math.cos(u)/2) * Math.sin(v);
 }
 
-
 function mobius3dParam (u, t, target) {
     u *= Math.PI;
     t *= 2 * Math.PI;
@@ -628,6 +635,60 @@ function mobius3dParam (u, t, target) {
     x = (2.25 + x) * Math.cos(u);
 
     target.set(x, y, z);
+}
+
+function createMobiusLights() {
+    pointLight1 = new THREE.PointLight(0xffffff, 10);
+    pointLight1.position.z = 0.5
+    pointLight1.position.y = 3
+    pointLights.add(pointLight1)
+    mobius.add(pointLight1)
+    
+    pointLight2 = new THREE.PointLight(0xffffff, 10);
+    pointLight2.position.z = 0.5
+    pointLight2.position.y = -3
+    pointLights.add(pointLight2)
+    mobius.add(pointLight2)
+
+    pointLight3 = new THREE.PointLight(0xffffff, 10);
+    pointLight3.position.z = 0.5
+    pointLight3.position.x = 3
+    pointLights.add(pointLight3)
+    mobius.add(pointLight3)
+
+    pointLight4 = new THREE.PointLight(0xffffff, 10);
+    pointLight4.position.z = 0.5
+    pointLight4.position.x = -3
+    pointLights.add(pointLight4)
+    mobius.add(pointLight4)
+
+    pointLight5 = new THREE.PointLight(0xffffff, 10);
+    pointLight5.position.z = 0.5
+    pointLight5.position.x = 2
+    pointLight5.position.y = 2
+    pointLights.add(pointLight5)
+    mobius.add(pointLight5)
+
+    pointLight6 = new THREE.PointLight(0xffffff, 10);
+    pointLight6.position.z = 0.5
+    pointLight6.position.x = -2
+    pointLight6.position.y = 2
+    pointLights.add(pointLight6)
+    mobius.add(pointLight6)
+
+    pointLight7 = new THREE.PointLight(0xffffff, 10);
+    pointLight7.position.z = 0.5
+    pointLight7.position.x = 2
+    pointLight7.position.y = -2
+    pointLights.add(pointLight7)
+    mobius.add(pointLight7)
+
+    pointLight8 = new THREE.PointLight(0xffffff, 10);
+    pointLight8.position.z = 0.5
+    pointLight8.position.x = -2
+    pointLight8.position.y = -2
+    pointLights.add(pointLight8)
+    mobius.add(pointLight8)
 }
 ///////////////////////
 /* MOVEMENT FUNCTONS */
@@ -908,6 +969,11 @@ function checkPressedKeys() {
         }
         if (pressedKeys.has('d')) {
             directionalLight.visible = !directionalLight.visible;
+        }
+        if (pressedKeys.has('p')) {
+            pointLights.forEach(pointlight => {
+                pointlight.visible = !pointlight.visible;
+            });
         }
         if (pressedKeys.has('s')) {
             spotLights.forEach(spotlight => {
