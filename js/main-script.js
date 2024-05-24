@@ -16,6 +16,7 @@ var press
 const pressedKeys = new Set();
 
 var directionalLight
+var buffer = new THREE.BufferGeometry();
 
 var elipsoid1, elipsoid2, elipsoid3
 var hyperboloid1, hyperboloid2, hyperboloid3
@@ -25,14 +26,15 @@ var helix1, helix2, helix3
 var ripple1, ripple2, ripple3
 var flatcircle1, flatcircle2, flatcircle3
 var klein1, klein2, klein3
+var mobius
 
 var objects
 var clock = new THREE.Clock();
-var diffuse_material1, diffuse_material2, diffuse_material3, diffuse_material4, diffuse_material5
-var phong_material1, phong_material2, phong_material3, phong_material4, phong_material5
-var cartoon_material1, cartoon_material2, cartoon_material3, cartoon_material4, cartoon_material5
+var diffuse_material1, diffuse_material2, diffuse_material3, diffuse_material4, diffuse_material5, diffuse_material6
+var phong_material1, phong_material2, phong_material3, phong_material4, phong_material5, phong_material6
+var cartoon_material1, cartoon_material2, cartoon_material3, cartoon_material4, cartoon_material5, cartoon_material6
 var normal_material
-var lightless_material1, lightless_material2, lightless_material3, lightless_material4, lightless_material5
+var lightless_material1, lightless_material2, lightless_material3, lightless_material4, lightless_material5, lightless_material6
 var current_material
 var material_lighting
 /////////////////////
@@ -132,7 +134,7 @@ function createObjects(){
     var ripple_geometry = new ParametricGeometry(rippleParam, 25, 25);
     var flatcircle_geometry = new ParametricGeometry(flatcircleParam, 25, 25);
     var klein_geometry = new ParametricGeometry(kleinParam, 25, 25);
-
+    var mobius_geometry = createMobiusGeometry();
 
     elipsoid1 = new THREE.Mesh(elipsoid_geometry, diffuse_material5);
     elipsoid1.position.y = 8.5
@@ -303,6 +305,12 @@ function createObjects(){
     klein3.rotation.y = Math.PI
     disc3.add(klein3)
 
+    mobius = new THREE.Mesh(mobius_geometry, diffuse_material6);
+    mobius.scale.set(1.5, 1.5, 1.5)
+    mobius.position.y = 28
+    mobius.rotation.x = Math.PI*0.5
+    main_cylinder.add(mobius)
+
     scene.add(main_cylinder);
 }
 
@@ -312,33 +320,39 @@ function createMaterials(){
     diffuse_material3 = new THREE.MeshLambertMaterial({color: 'Red'});
     diffuse_material4 = new THREE.MeshLambertMaterial({color: 'Blue'});
     diffuse_material5 = new THREE.MeshLambertMaterial({color: 'Purple'});
+    diffuse_material6 = new THREE.MeshLambertMaterial({color: 'Lime'});
     diffuse_material1.side = THREE.DoubleSide;
     diffuse_material2.side = THREE.DoubleSide;
     diffuse_material3.side = THREE.DoubleSide;
     diffuse_material4.side = THREE.DoubleSide;
     diffuse_material5.side = THREE.DoubleSide;
+    diffuse_material6.side = THREE.DoubleSide;
 
     phong_material1 = new THREE.MeshPhongMaterial({color: 'Gray'});
     phong_material2 = new THREE.MeshPhongMaterial({color: 'Yellow'});
     phong_material3 = new THREE.MeshPhongMaterial({color: 'Red'});
     phong_material4 = new THREE.MeshPhongMaterial({color: 'Blue'});
     phong_material5 = new THREE.MeshPhongMaterial({color: 'Purple'});
+    phong_material6 = new THREE.MeshPhongMaterial({color: 'Lime'});
     phong_material1.side = THREE.DoubleSide;
     phong_material2.side = THREE.DoubleSide;
     phong_material3.side = THREE.DoubleSide;
     phong_material4.side = THREE.DoubleSide;
     phong_material5.side = THREE.DoubleSide;
+    phong_material6.side = THREE.DoubleSide;
 
     cartoon_material1 = new THREE.MeshToonMaterial({color: 'Gray'});
     cartoon_material2 = new THREE.MeshToonMaterial({color: 'Yellow'});
     cartoon_material3 = new THREE.MeshToonMaterial({color: 'Red'});
     cartoon_material4 = new THREE.MeshToonMaterial({color: 'Blue'});
     cartoon_material5 = new THREE.MeshToonMaterial({color: 'Purple'});
+    cartoon_material6 = new THREE.MeshToonMaterial({color: 'Lime'});
     cartoon_material1.side = THREE.DoubleSide;
     cartoon_material2.side = THREE.DoubleSide;
     cartoon_material3.side = THREE.DoubleSide;
     cartoon_material4.side = THREE.DoubleSide;
     cartoon_material5.side = THREE.DoubleSide;
+    cartoon_material6.side = THREE.DoubleSide;
 
     normal_material = new THREE.MeshNormalMaterial();
     normal_material.side = THREE.DoubleSide;
@@ -348,12 +362,51 @@ function createMaterials(){
     lightless_material3 = new THREE.MeshBasicMaterial({color: 'Red'});
     lightless_material4 = new THREE.MeshBasicMaterial({color: 'Blue'});
     lightless_material5 = new THREE.MeshBasicMaterial({color: 'Purple'});
+    lightless_material6 = new THREE.MeshBasicMaterial({color: 'Lime'});
     lightless_material1.side = THREE.DoubleSide;
     lightless_material2.side = THREE.DoubleSide;
     lightless_material3.side = THREE.DoubleSide;
     lightless_material4.side = THREE.DoubleSide;
     lightless_material5.side = THREE.DoubleSide;
+    lightless_material6.side = THREE.DoubleSide;
 
+}
+
+function createMobiusGeometry() {
+    var indices = [];
+    var vertices = [];
+    var p0 = new THREE.Vector3()
+    var stacks = 8;
+    var slices = 8;
+    var sliceCount = slices + 1;
+
+    for (var i = 0; i <= stacks; i++) {
+        var v = i / stacks;
+
+        for (var j = 0; j <= slices; j++) {
+
+            var u = j / slices;
+
+            mobius3dParam(u, v, p0);
+            vertices.push(p0.x, p0.y, p0.z);
+        }
+    }
+
+    for (var i = 0; i < stacks; i++) {
+        for (var j = 0; j < slices; j++) {
+
+            var a = i * sliceCount + j;
+            var b = i * sliceCount + j + 1;
+            var c = (i + 1) * sliceCount + j + 1;
+            var d = (i + 1) * sliceCount + j;
+
+            indices.push(a, b, d);
+            indices.push(b, c, d);
+        }
+    }
+    buffer.setIndex(indices);
+    buffer.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    return buffer;
 }
 
 function elipsoidParam(u, v, target) {
@@ -413,6 +466,20 @@ function kleinParam(u, v, target) {
     target.y = -2 * (1 - Math.cos(u)/2) * Math.sin(v);
 }
 
+
+function mobius3dParam (u, t, target) {
+    u *= Math.PI;
+    t *= 2 * Math.PI;
+    u = u * 2;
+    const phi = u / 2;
+
+    var x = 0.125 * Math.cos(t) * Math.cos(phi) - 0.65 * Math.sin(t) * Math.sin(phi);
+    var z = 0.125 * Math.cos(t) * Math.sin(phi) + 0.65 * Math.sin(t) * Math.cos(phi);
+    var y = (2.25 + x) * Math.sin(u);
+    x = (2.25 + x) * Math.cos(u);
+
+    target.set(x, y, z);
+}
 ///////////////////////
 /* MOVEMENT FUNCTONS */
 ///////////////////////
@@ -484,6 +551,7 @@ function changeMaterials(type){
             for (var j = 0; j < objects.length; j++) {
                 objects[j].material = diffuse_material5;
             }
+            mobius.material = diffuse_material6;
         }
         current_material = "diffuse";
     } else if (type == "phong") {
@@ -495,6 +563,7 @@ function changeMaterials(type){
             for (var j = 0; j < objects.length; j++) {
                 objects[j].material = phong_material5;
             }
+            mobius.material = phong_material6;
         }
         current_material = "phong";
     } else if (type == "toon") {
@@ -506,6 +575,7 @@ function changeMaterials(type){
             for (var j = 0; j < objects.length; j++) {
                 objects[j].material = cartoon_material5;
             }
+            mobius.material = cartoon_material6;
         }
         current_material = "toon";
     } else if (type == "normal") {
@@ -517,6 +587,7 @@ function changeMaterials(type){
             for (var j = 0; j < objects.length; j++) {
                 objects[j].material = normal_material;
             }
+            mobius.material = normal_material;
         }
         current_material = "normal";
     }
@@ -532,6 +603,7 @@ function changeMaterialLighting() {
         for (var j = 0; j < objects.length; j++) {
             objects[j].material = lightless_material5;
         }
+        mobius.material = lightless_material6;
         material_lighting = !material_lighting;
     } else {
         material_lighting = !material_lighting;
