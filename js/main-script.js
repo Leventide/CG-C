@@ -501,6 +501,25 @@ function check_up (disc, up) {
     return up;
 }
 
+/////////////
+/* SKYDOME */
+/////////////
+function createSkydome(){
+    var radius = 86;
+    var widthSegments = 60; 
+    var heightSegments = 20; 
+    var phiStart = 0; 
+    var phiLength = 6.32; 
+    var thetaStart = 0;
+    var thetaLength = 1.6;//ajustar o tamanho da meia esfera
+    //var geometry = new THREE.SphereGeometry(1000/2,60,20);
+    var geometry = new THREE.SphereGeometry( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength);
+    var texture = new THREE.TextureLoader().load('poema.png');
+    var material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
+    var skydome = new THREE.Mesh(geometry, material);
+    scene.add(skydome);
+}
+
 function rotateAll(delta_time){
     main_cylinder.rotation.y += Math.PI*0.01*delta*10;
 
@@ -638,7 +657,7 @@ function init() {
     createCameras();
     createObjects();
     createLights();
-
+    createSkydome();
     render()
     active1 = true;
     active2 = true;
