@@ -64,7 +64,7 @@ function createCameras(){
     'use strict';
 
     fixPerspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
-    fixPerspectiveCamera.position.set(40, 70, 40);
+    fixPerspectiveCamera.position.set(50, 70, 50);
     fixPerspectiveCamera.lookAt(-20, 0, -20);
 
     stereoCamera = new THREE.StereoCamera();
@@ -100,7 +100,7 @@ function createObjects(){
     };
     var main_cylinder_geometry = new THREE.CylinderGeometry(5, 5, 50, 32);
     main_cylinder = new THREE.Mesh(main_cylinder_geometry, diffuse_material1);
-    main_cylinder.position.set(0, 25, 0);
+    main_cylinder.position.set(15, 30, 15);
     main_cylinder.rotation.set(0, 0, 0);
 
     var disc1_shape = new THREE.Shape();
