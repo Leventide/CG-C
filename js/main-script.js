@@ -1,9 +1,6 @@
 import * as THREE from 'three';
 import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
-import * as Stats from 'three/addons/libs/stats.module.js';
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
 //////////////////////
 /* GLOBAL VARIABLES */
@@ -34,8 +31,10 @@ var clock = new THREE.Clock();
 var diffuse_material1, diffuse_material2, diffuse_material3, diffuse_material4, diffuse_material5
 var phong_material1, phong_material2, phong_material3, phong_material4, phong_material5
 var cartoon_material1, cartoon_material2, cartoon_material3, cartoon_material4, cartoon_material5
-var normal_material1, normal_material2, normal_material3, normal_material4, normal_material5
-
+var normal_material
+var lightless_material1, lightless_material2, lightless_material3, lightless_material4, lightless_material5
+var current_material
+var material_lighting
 /////////////////////
 /* CREATE SCENE(S) */
 /////////////////////
@@ -341,16 +340,20 @@ function createMaterials(){
     cartoon_material4.side = THREE.DoubleSide;
     cartoon_material5.side = THREE.DoubleSide;
 
-    normal_material1 = new THREE.MeshNormalMaterial({color: 'Gray'});
-    normal_material2 = new THREE.MeshNormalMaterial({color: 'Yellow'});
-    normal_material3 = new THREE.MeshNormalMaterial({color: 'Red'});
-    normal_material4 = new THREE.MeshNormalMaterial({color: 'Blue'});
-    normal_material5 = new THREE.MeshNormalMaterial({color: 'Purple'});
-    normal_material1.side = THREE.DoubleSide;
-    normal_material2.side = THREE.DoubleSide;
-    normal_material3.side = THREE.DoubleSide;
-    normal_material4.side = THREE.DoubleSide;
-    normal_material5.side = THREE.DoubleSide;
+    normal_material = new THREE.MeshNormalMaterial();
+    normal_material.side = THREE.DoubleSide;
+
+    lightless_material1 = new THREE.MeshBasicMaterial({color: 'Gray'});
+    lightless_material2 = new THREE.MeshBasicMaterial({color: 'Yellow'});
+    lightless_material3 = new THREE.MeshBasicMaterial({color: 'Red'});
+    lightless_material4 = new THREE.MeshBasicMaterial({color: 'Blue'});
+    lightless_material5 = new THREE.MeshBasicMaterial({color: 'Purple'});
+    lightless_material1.side = THREE.DoubleSide;
+    lightless_material2.side = THREE.DoubleSide;
+    lightless_material3.side = THREE.DoubleSide;
+    lightless_material4.side = THREE.DoubleSide;
+    lightless_material5.side = THREE.DoubleSide;
+
 }
 
 function elipsoidParam(u, v, target) {
@@ -473,39 +476,67 @@ function changeMaterials(type){
     'use strict';
 
     if (type == "diffuse") {
-        main_cylinder.material = diffuse_material1;
-        disc1.material = diffuse_material2;
-        disc2.material = diffuse_material3;
-        disc3.material = diffuse_material4;
-        for (var j = 0; j < objects.length; j++) {
-            objects[j].material = diffuse_material5;
+        if (material_lighting) {
+            main_cylinder.material = diffuse_material1;
+            disc1.material = diffuse_material2;
+            disc2.material = diffuse_material3;
+            disc3.material = diffuse_material4;
+            for (var j = 0; j < objects.length; j++) {
+                objects[j].material = diffuse_material5;
+            }
         }
+        current_material = "diffuse";
     } else if (type == "phong") {
-        main_cylinder.material = phong_material1;
-        disc1.material = phong_material2;
-        disc2.material = phong_material3;
-        disc3.material = phong_material4;
-        for (var j = 0; j < objects.length; j++) {
-            objects[j].material = phong_material5;
+        if (material_lighting) {
+            main_cylinder.material = phong_material1;
+            disc1.material = phong_material2;
+            disc2.material = phong_material3;
+            disc3.material = phong_material4;
+            for (var j = 0; j < objects.length; j++) {
+                objects[j].material = phong_material5;
+            }
         }
+        current_material = "phong";
     } else if (type == "toon") {
-        main_cylinder.material = cartoon_material1;
-        disc1.material = cartoon_material2;
-        disc2.material = cartoon_material3;
-        disc3.material = cartoon_material4;
-        for (var j = 0; j < objects.length; j++) {
-            objects[j].material = cartoon_material5;
+        if (material_lighting) {
+            main_cylinder.material = cartoon_material1;
+            disc1.material = cartoon_material2;
+            disc2.material = cartoon_material3;
+            disc3.material = cartoon_material4;
+            for (var j = 0; j < objects.length; j++) {
+                objects[j].material = cartoon_material5;
+            }
         }
+        current_material = "toon";
     } else if (type == "normal") {
-        main_cylinder.material = normal_material1;
-        disc1.material = normal_material2;
-        disc2.material = normal_material3;
-        disc3.material = normal_material4;
-        for (var j = 0; j < objects.length; j++) {
-            objects[j].material = normal_material5;
+        if (material_lighting) {
+            main_cylinder.material = normal_material;
+            disc1.material = normal_material;
+            disc2.material = normal_material;
+            disc3.material = normal_material;
+            for (var j = 0; j < objects.length; j++) {
+                objects[j].material = normal_material;
+            }
         }
+        current_material = "normal";
     }
 
+}
+
+function changeMaterialLighting() {
+    if(material_lighting){
+        main_cylinder.material = lightless_material1;
+        disc1.material = lightless_material2;
+        disc2.material = lightless_material3;
+        disc3.material = lightless_material4;
+        for (var j = 0; j < objects.length; j++) {
+            objects[j].material = lightless_material5;
+        }
+        material_lighting = !material_lighting;
+    } else {
+        material_lighting = !material_lighting;
+        changeMaterials(current_material);
+    }
 }
 
 /////////////
@@ -533,20 +564,19 @@ function init() {
     // Create scene and cameras
     createScene();
     createCameras();
+    createObjects();
     createLights();
 
-    createObjects();
-
-
     render()
-    active1 = false;
-    active2 = false;
-    active3 = false;
+    active1 = true;
+    active2 = true;
+    active3 = true;
     up1 = 0;
     up2 = 0;
     up3 = 0;
     press = true;
-
+    current_material = "diffuse";
+    material_lighting = true;
     objects = [elipsoid1, elipsoid2, elipsoid3, hyperboloid1,
         hyperboloid2, hyperboloid3, cone1, cone2, cone3, torus1, 
         torus2, torus3, helix1, helix2, helix3, ripple1, ripple2,
@@ -650,6 +680,9 @@ function checkPressedKeys() {
         }
         if (pressedKeys.has('r')) {
             changeMaterials("normal");
+        }
+        if (pressedKeys.has('t')) {
+            changeMaterialLighting();
         }
     }
 }
