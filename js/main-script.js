@@ -64,8 +64,8 @@ function createCameras(){
     'use strict';
 
     fixPerspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
-    fixPerspectiveCamera.position.set(50, 70, 50);
-    fixPerspectiveCamera.lookAt(-20, 0, -20);
+    fixPerspectiveCamera.position.set(50, 65, 50);
+    fixPerspectiveCamera.lookAt(-20, -5, -20);
 
     stereoCamera = new THREE.StereoCamera();
     stereoCamera.cameraL.position.copy(fixPerspectiveCamera.position);
@@ -721,8 +721,7 @@ function createSkydome(){
     var phiStart = 0; 
     var phiLength = 6.32; 
     var thetaStart = 0;
-    var thetaLength = 1.6;//ajustar o tamanho da meia esfera
-    //var geometry = new THREE.SphereGeometry(1000/2,60,20);
+    var thetaLength = 1.6;
     var geometry = new THREE.SphereGeometry( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength);
     var texture = new THREE.TextureLoader().load('poema.png');
     var material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
@@ -913,7 +912,6 @@ function animate() {
     }
 
     renderer.render(scene, fixPerspectiveCamera);
-    //requestAnimationFrame(animate);
     renderer.setAnimationLoop(animate);
 }
 
